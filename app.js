@@ -270,10 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
       idx++;
     }
 
-    // Photo consent: Yes/No
-    if (idx < unlabeled.length && /^(yes|no)$/i.test(unlabeled[idx])) {
-      result.photoConsent = unlabeled[idx];
-      idx++;
+    // Photo consent: Yes/No (scan forward past any session selections)
+    for (let j = idx; j < unlabeled.length; j++) {
+      if (/^(yes|no)$/i.test(unlabeled[j])) {
+        result.photoConsent = unlabeled[j];
+        break;
+      }
     }
 
     return result;
