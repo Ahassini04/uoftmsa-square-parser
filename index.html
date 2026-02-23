@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSA Square Parser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1>MSA Square Parser</h1>
+    <p>Parse Square CSV exports into organized tables for Google Sheets</p>
+  </header>
+
+  <main class="main">
+    <!-- Upload Card -->
+    <div class="card upload-card" id="upload-card">
+      <div class="drop-zone" id="drop-zone">
+        <svg class="upload-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 32V12M24 12L16 20M24 12L32 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 32V36C8 38.2091 9.79086 40 12 40H36C38.2091 40 40 38.2091 40 36V32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="drop-title">Drag & drop your CSV file here</p>
+        <span class="drop-or">or</span>
+        <label class="btn btn-primary browse-btn">
+          Browse Files
+          <input type="file" id="file-input" accept=".csv" hidden>
+        </label>
+        <p class="drop-hint">Accepts Square transaction CSV exports</p>
+      </div>
+    </div>
+
+    <!-- File Info Bar -->
+    <div class="file-bar hidden" id="file-bar">
+      <div class="file-info">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10.5 1.5H4.5C3.67157 1.5 3 2.17157 3 3V15C3 15.8284 3.67157 16.5 4.5 16.5H13.5C14.3284 16.5 15 15.8284 15 15V6L10.5 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.5 1.5V6H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="file-name" id="file-name"></span>
+      </div>
+      <button class="btn btn-ghost" id="clear-btn">Upload New File</button>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results" class="hidden">
+      <!-- Summary -->
+      <div class="summary">
+        <div class="summary-card">
+          <span class="summary-number" id="iftar-total">0</span>
+          <span class="summary-label">Iftar Signups</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-number" id="programming-total">0</span>
+          <span class="summary-label">Programming Signups</span>
+        </div>
+      </div>
+
+      <!-- Iftars Table -->
+      <div class="card table-card">
+        <div class="table-header">
+          <div class="table-title-group">
+            <h2>Ramadan Iftars 2026</h2>
+            <span class="badge" id="iftar-badge">0 entries</span>
+          </div>
+          <div class="table-actions">
+            <select id="iftar-filter" class="select">
+              <option value="all">All Dates</option>
+            </select>
+            <button class="btn btn-outline copy-btn" id="copy-iftar">
+              <svg class="icon icon-copy" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 11V3C3 2.44772 3.44772 2 4 2H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <svg class="icon icon-check hidden" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="copy-label">Copy Table</span>
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap" id="iftar-table-wrap">
+          <table id="iftar-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Dietary Restrictions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="empty-state hidden" id="iftar-empty">
+          <p>No iftar signups found in this file</p>
+        </div>
+      </div>
+
+      <!-- Programming Table -->
+      <div class="card table-card">
+        <div class="table-header">
+          <div class="table-title-group">
+            <h2>Ramadan Programming 2026</h2>
+            <span class="badge" id="programming-badge">0 entries</span>
+          </div>
+          <div class="table-actions">
+            <select id="programming-filter" class="select">
+              <option value="all">All Events</option>
+            </select>
+            <button class="btn btn-outline copy-btn" id="copy-programming">
+              <svg class="icon icon-copy" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 11V3C3 2.44772 3.44772 2 4 2H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <svg class="icon icon-check hidden" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="copy-label">Copy Table</span>
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap" id="programming-table-wrap">
+          <table id="programming-table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Status</th>
+                <th>Year</th>
+                <th>Photo Consent</th>
+                <th>Accessibility</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="empty-state hidden" id="programming-empty">
+          <p>No programming signups found in this file</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>MSA Square Parser &mdash; University of Toronto Muslim Students' Association</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
