@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (/^Full Name:/i.test(trimmed)) {
         result.fullName = trimmed.replace(/^Full Name:\s*/i, '').trim();
       } else if (/^Email:/i.test(trimmed) || trimmed.includes('@')) {
-        result.email = trimmed.replace(/^Confirm Email:\s*/i, '').replace(/^Email:\s*/i, '').trim();
+        result.email = trimmed.replace(/^Email:\s*/i, '').replace(/^Confirm Email:\s*/i, '').trim();
       } else if (/dietary|food allerg/i.test(trimmed)) {
         // New format: long question ending with ": answer"
         const lastColon = trimmed.lastIndexOf(': ');
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (/^Accessibility Needs?:/i.test(trimmed)) {
         result.accessibility = trimmed.replace(/^Accessibility Needs?:\s*/i, '').trim();
       } else if (/^Email:/i.test(trimmed) || trimmed.includes('@')) {
-        result.email = trimmed.replace(/^Confirm Email:\s*/i, '').replace(/^Email:\s*/i, '').trim();
+        result.email = trimmed.replace(/^Email:\s*/i, '').replace(/^Confirm Email:\s*/i, '').trim();
       } else if (/^Phone Number:/i.test(trimmed) || /^\d[\d\s-]{6,}$/.test(trimmed)) {
         // Skip phone numbers
       } else {
